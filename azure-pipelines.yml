@@ -1,0 +1,44 @@
+trigger:
+- master
+
+variables:
+  tag: '$(Build.BuildId)'
+  imageName: 'martijnnbunschoten/crypto-bot'
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      persistCredentials: true
+    - task: Docker@2
+      displayName: Build image
+      inputs:
+        repository: $(imageName)
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Push image
+      inputs:
+        containerRegistry: |
+          dockerhub
+        repository: $(imageName)
+        command: push
+        tags: |
+          $(tag)
+    - task: Bash@3
+      displayName: Updating kubernetes manifest
+      inputs:
+        targetType: 'filePath'
+        filePath: 'crypto-kubernetes/updateDockerTag.sh'
+        arguments: $(imageName) $(tag)
+        workingDirectory: $(Build.SourcesDirectory)/crypto-kubernetes
+
+          

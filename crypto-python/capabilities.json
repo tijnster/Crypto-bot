@@ -1,0 +1,8 @@
+{
+    "RSI_PERIOD" : 14,
+    "RSI_OVERSOLD" : 27.5,
+    "RSI_OVERBOUGHT" : 70,
+    "TRADE_SYMBOL" : "VETUSDT",
+    "TRADE_QUANTITY" : 150.0,
+    "LAST_BOUGHT" : 0
+}

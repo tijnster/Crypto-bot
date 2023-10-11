@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptobot-deployment
+  labels:
+    app: cryptobot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptobot
+  template:
+    metadata:
+      labels:
+        app: cryptobot
+    spec:
+      containers:
+      - name: cryptobot
+        image: martijnnbunschoten/crypto-bot:56
+        ports:
+        - containerPort: 80
